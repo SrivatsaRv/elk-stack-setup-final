@@ -1,4 +1,33 @@
-# How to use it? 
+## Things I have tested for ELK 8.2.3 Stack
+
+**With Elasticsearch on HTTPS and Kibana on HTTP**
+- Local Watcher Related: 
+    - Healthcheck to Elasticsearch - **pending**
+    - Create watcher - **pending**
+    - Update watcher  - **pending**
+
+- Local Rules Related:
+    - Healthcheck to Kibana - **pending**
+    - Create rule - **pending**
+    - Update rule - **pending**
+
+
+## How to Proceed with Setup - Summary of Instructions:
+- Setup ELK Stack as per instructions below
+- Obtain Elasticsearch API Key with all access - curl call provided below
+- Obtain Kibana API Key with all accesss - curl call provided below
+- Run `verify_access_health.sh` script as a local dev environment setup user , proceed ahead only if gree - else troubleshoot
+- Start `generate_requests.sh` script for load generation , index created will be - `updated-logs-index`
+- Ensure your Gitlab runner is working , with `gitlab-runner status` , and you receieve `gitlab-runner: Service is running`
+- Ensure `Elasticsearch is running over https` a nd `Kibana is running http` for setup similarity
+- Peform tests mentioned in capability 
+ 
+
+
+
+
+
+## Step by Step Guide:
 
 ### Step 0 - Verify Compatiblity Matrix with Elastic , to Ensure you have capability to custom install versions:
 ```
@@ -9,7 +38,7 @@ Why we do this?
 - look out for N/A and * remarks , and interpret accordingly, 
 ```
 
-### Step 1 - Clone the repository
+### Step 2 - Clone the repository
 ```
 $git clone https://github.com/SrivatsaRv/elk-stack-setup-final
 ```
@@ -48,6 +77,109 @@ Good check to ensure you're healthy?
 - 1 container will be down and in exited stage - elasticsearch setup container
 ```
 
+### Step 5 - Obtain API Keys for Kibana and Elasticsearch
+**Eleasticsearch - All Access**
+```
+
+curl -X POST "http://localhost:9200/_security/api_key" \
+  -H "Content-Type: application/json" \
+  -u elastic:changeme \
+  -d '{
+    "name": "elasticsearch_super_admin_key",
+    "role_descriptors": {
+      "super_admin_role": {
+        "cluster": ["all"],
+        "index": [{
+          "names": ["*"],
+          "privileges": ["all"]
+        }],
+        "applications": [{
+          "application": "kibana",
+          "privileges": ["*"],
+          "resources": ["*"]
+        }],
+        "global": { 
+          "cluster": ["all"],
+          "indices": ["*"]
+        },
+        "run_as": ["*"]
+      }
+    }
+  }'
+```
+
+**Kibana - All Access**
+```
+curl -X POST "localhost:5601/internal/security/api_key" \
+  -H "kbn-xsrf: true" \
+  -H "Content-Type: application/json" \
+  -u elastic:changeme \
+  -d '{
+    "name": "kibana_alerting_key",
+    "role_descriptors": {
+      "kibana_system": {
+        "cluster": ["all"],
+        "indices": [{
+          "names": ["*"],
+          "privileges": ["all"]
+        }],
+        "applications": [
+        {
+          "application": "kibana-.kibana",
+          "privileges": ["*"],
+          "resources": ["*"]
+        }
+      ]
+      }
+    }
+  }'
+```
+
+
+### Step - 6 - Verify Permissions and Health with `verify_health_before_starting.sh`
+```
+$bash verify_health_before_starting.sh
+
+Valid Response:
+
+```
+
+### Step - 7 - Create index, and start load generation onto Elasticserach cluster with  `generate_requests.sh`
+```
+$bash generate_requests.sh
+
+Valid Response:
+continous trail of generated index docs under the name -  "updated-logs-index"
+
+Example:
+{
+  "_index" : "updated-logs-index",
+  "_id" : "fhc5VZQB3weEWXrancXg",
+  "_version" : 1,
+  "result" : "created",
+  "_shards" : {
+    "total" : 2,
+    "successful" : 1,
+    "failed" : 0
+  },
+  "_seq_no" : 152,
+  "_primary_term" : 1
+}
+
+```
+
+### Step - 7 - Check Gitlab runner status that will execute your Gitlab Reponsitory status
+```
+$gitlab-runner stats
+
+Response:
+Runtime platform: arch=arm64 os=darwin pid=68443 revision=3153ccc6 version=17.7.0
+gitlab-runner: Service is running
+```
+
+### You are ready to go 
+
+
 
 ### Known Issues?
 **Issue-1 - Kibana sometimes doesn't come up , and gives an error log , that Kibana exited / stopped**
@@ -69,7 +201,5 @@ Root Cause:
 - Your esdata01 volume still contains metadata from the previous 8.7.x setup, which references Lucene95, a codec introduced after 8.2.x.
 
 ```
-
-
 
 
