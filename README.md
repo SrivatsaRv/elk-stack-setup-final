@@ -16,7 +16,6 @@
 - Setup ELK Stack as per instructions below
 - Obtain Elasticsearch API Key with all access - curl call provided below
 - Obtain Kibana API Key with all accesss - curl call provided below
-- Run `verify_access_health.sh` script as a local dev environment setup user , proceed ahead only if gree - else troubleshoot
 - Start `generate_requests.sh` script for load generation , index created will be - `updated-logs-index`
 - Ensure your Gitlab runner is working , with `gitlab-runner status` , and you receieve `gitlab-runner: Service is running`
 - Ensure `Elasticsearch is running over https` a nd `Kibana is running http` for setup similarity
@@ -135,16 +134,7 @@ curl -X POST "localhost:5601/internal/security/api_key" \
   }'
 ```
 
-
-### Step - 6 - Verify Permissions and Health with `verify_health_before_starting.sh`
-```
-$bash verify_health_before_starting.sh
-
-Valid Response:
-
-```
-
-### Step - 7 - Create index, and start load generation onto Elasticserach cluster with  `generate_requests.sh`
+### Step 6 - Create index, and start load generation onto Elasticserach cluster with  `generate_requests.sh`
 ```
 $bash generate_requests.sh
 

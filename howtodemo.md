@@ -1,10 +1,8 @@
 ## Checklist for Valid Capability of Pipeline
-
-- Run `verify_access_health.sh` before demo-ing , so you know you are sorted
 - Very your gitlab runner is status with `gitlab-runner status` and get a green signal there
 - Ensure `generate_requests.sh` has been running, and you have setup `Discover` and any other visuals necessary in your Kibana
 - Beofre demo-ing with pipelines , run `deploy_watcher_to_es.py` and `deploy_rules_to_kibana.py` in local and check
-- 
+
 
 
 
