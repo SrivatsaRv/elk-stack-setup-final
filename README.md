@@ -1,17 +1,3 @@
-## Things I have tested for ELK 8.2.3 Stack
-
-**With Elasticsearch on HTTPS and Kibana on HTTP**
-- Local Watcher Related: 
-    - Healthcheck to Elasticsearch - **pending**
-    - Create watcher - **pending**
-    - Update watcher  - **pending**
-
-- Local Rules Related:
-    - Healthcheck to Kibana - **pending**
-    - Create rule - **pending**
-    - Update rule - **pending**
-
-
 ## How to Proceed with Setup - Summary of Instructions:
 - Setup ELK Stack as per instructions below
 - Obtain Elasticsearch API Key with all access - curl call provided below
@@ -22,10 +8,6 @@
 - Note Logstash Container takes at least a minute to come up , wait for it. Successfully started Logstash API endpoint will be the message.
 - Peform tests mentioned in capability 
  
-
-
-
-
 
 ## Step by Step Guide:
 
