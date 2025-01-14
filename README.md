@@ -6,6 +6,7 @@
 - Ensure your Gitlab runner is working , with `gitlab-runner status` , and you receieve `gitlab-runner: Service is running`
 - Ensure `Elasticsearch is running over https` a nd `Kibana is running http` for setup similarity
 - Note Logstash Container takes at least a minute to come up , wait for it. Successfully started Logstash API endpoint will be the message.
+- Ensure you have a xyz-data.csv file (.csv) files , logstash is tracking that - else it will fail
 - Peform tests mentioned in capability 
  
 
